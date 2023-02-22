@@ -11,15 +11,16 @@
 ## Duty
 
 ### Lau Hing Pui
-  - Home Page
-  - Forum Page
-  - User Login
-  - User Table
-  - Post Table
-  - Reply Table
+- [ ] Home Page
+- [ ] Forum Page
+- [ ] User Login
+- [ ] User Table
+- [ ] Post Table
+- [ ] Reply Table
 
 ### Wong Chun Ting 
-
+- [ ] XXX
 
 
 ### Wong Yat Wa
+- [ ] XXX

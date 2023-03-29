@@ -19,7 +19,10 @@
 - [ ] Reply Table
 
 ### Wong Chun Ting 
-- [ ] XXX
+- [ ] Webpage base
+- [ ] Cataloge Table
+- [ ] Document Table
+- [ ] Career paths
 
 
 ### Wong Yat Wa

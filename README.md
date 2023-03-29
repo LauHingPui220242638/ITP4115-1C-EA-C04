@@ -1,7 +1,7 @@
 # ITP4115-1C-EA-Codecademy
 
 ## Target
-[Codecademy](https://www.example.com)
+[Codecademy](https://www.codecademy.com/)
 
 ## Group Members
 - Lau Hing Pui
@@ -19,7 +19,11 @@
   - Reply Table
 
 ### Wong Chun Ting 
-
+  - Webpage base
+  - ???
+  - ???
+  - ???
+  - ???
 
 
 ### Wong Yat Wa

@@ -9,21 +9,8 @@
 - Wong Yat Wa
 
 ## Duty
-
-### Lau Hing Pui
-  - Home Page
-  - Forum Page
-  - User Login
-  - User Table
-  - Post Table
-  - Reply Table
-
-### Wong Chun Ting 
-  - Webpage base
-  - ???
-  - ???
-  - ???
-  - ???
-
-
-### Wong Yat Wa
+  -[] Webpage base
+  -[] ???
+  -[] ???
+  -[] ???
+  -[] ???

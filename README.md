@@ -10,7 +10,7 @@
 
 ## Duty
   -[ ] Webpage base
-  -[ ] ???
-  -[ ] ???
-  -[ ] ???
+  -[ ] Cataloge Table
+  -[ ] Document Table
+  -[ ] Articles?
   -[ ] ???

@@ -9,8 +9,8 @@
 - Wong Yat Wa
 
 ## Duty
-  -[ ] Webpage base
-  -[ ] Cataloge Table
-  -[ ] Document Table
-  -[ ] Articles?
-  -[ ] ???
+ - [ ] Webpage base
+ - [ ] Cataloge Table
+ - [ ] Document Table
+ - [ ] Articles?
+ - [ ] ???

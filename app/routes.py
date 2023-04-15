@@ -50,7 +50,7 @@ def catalog():
 @app.route('/catalog/<int:id>')
 def catalog_subj(id):
     subject = Subject.query.get(id)
-    courses = Course.query.filter(Course.related_subj == Subject.id)
+    courses = Course.query.filter(Course.related_subj == id)
     return render_template('catalog_subj.html.j2', subject=subject, courses=courses)
 
 

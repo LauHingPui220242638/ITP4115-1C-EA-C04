@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Course, Subject, Post, Enrollment
+from app.models import User, Course, Subject, Post
 from app.email import send_password_reset_email
 
 
@@ -51,8 +51,7 @@ def catalog():
 def catalog_subj(id, related_subj):
     subject = Subject.query.get(id)
     course = Course.query.get(related_subj)
-    return render_template('catalog_subj.html.j2',subject=subject, course=course)
-
+    return render_template('catalog_subj.html.j2', subject=subject, course=course)
 
 
 @app.route('/course/<int:id>')
@@ -211,29 +210,3 @@ def unfollow(username):
     db.session.commit()
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
-
-# test catalog code
-@app.route('/enroll/<int:id>', methods=['POST'])
-@login_required
-def enroll(id):
-    course = Course.query.get(id)
-    if course is None:
-        flash(_('Course not found.'))
-    enrollment = Enrollment(user=user, course=course)
-    db.session.add(enrollment)
-    db.session.commit()
-    flash(_('You are have enrolled the course!'))
-    return redirect(url_for('course', id=id))
-
-
-@app.route('/unenroll/<int:id>', methods=['POST'])
-@login_required
-def unenroll(id):
-    course = Course.query.get(id)
-    if course is None:
-        flash(_('Course not found.'))
-    enrollment = Enrollment(user=user, course=course)
-    db.session.delete(enrollment)
-    db.session.commit()
-    flash(_('You have unenroll from the course.'))
-    return redirect(url_for('course', id=id))

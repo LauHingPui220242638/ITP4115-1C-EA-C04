@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from hashlib import md5
 from app import app, db, login
 import jwt
-from sqlalchemy import Enum
+
 from flask_login import UserMixin
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -23,7 +23,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
-    enrollments = db.relationship('Enrollment', backref='user')
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -96,8 +95,8 @@ class Post(db.Model):
 class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))
+    description = db.Column(db.String(600))
     type = db.Enum('language', 'other', default='other', nullable=False)
-
 
 
 class Course(db.Model):
@@ -105,9 +104,9 @@ class Course(db.Model):
     coursename = db.Column(db.String(200))
     description = db.Column(db.String(600))
     chapters = db.relationship('Chapter', backref='course', lazy=True)
+    project = db.relationship('Project', backref='course')
     related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
     subject = db.relationship("Subject", backref="course", lazy=True)
-    enrollments = db.relationship('Enrollment', backref='course')
 
 
 class Chapter(db.Model):
@@ -122,7 +121,6 @@ class Project(db.Model):
     projectname = db.Column(db.String(200))
     description = db.Column(db.String(600))
     courseid = db.Column(db.Integer, db.ForeignKey('course.id'))
-    course = db.relationship('Course', backref='project')
 
 
 class Lesson(db.Model):
@@ -131,9 +129,4 @@ class Lesson(db.Model):
     related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
     subject = db.relationship("Subject", backref="lesson", lazy=True)
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
-
-
-class Enrollment(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), primary_key=True)
 

@@ -4,19 +4,28 @@
     <tr>
     <h1>{{ course.coursename }}</h1>
     {{ course.description }}
-    <h2>Chapters</h2>
+    <h2>Syllabus</h2>
     <ul>
         {% for chapter in course.chapters %}
             <li>
                 {{ chapter.title }}
                 <ul>
                     {% for lesson in chapter.lessons %}
-                    <li>{{ lesson.title }}</li>
+                    <li>{{ lesson.name }}</li>
                     {% endfor %}
                 </ul>
             </li>
         </tr>
     </table>
+        {% endfor %}
+    </ul>
+    <h2>Projects</h2>
+    <ul>
+        {% for project in course.project %}
+            <li>
+                <h3>{{ project.projectname }}</h3>
+                <h4>{{ project.description }}</h4>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

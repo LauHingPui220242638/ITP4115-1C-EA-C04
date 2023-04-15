@@ -5,13 +5,13 @@
         <h2>popular subjects and languages</h2>
         {% for item in subject %}
         <div class="Subjects">
-        <h2><a href="{{ url_for('index') }}">{{ item.name }}</a></h2>
+        <h2><a href="{{ url_for('catalog_subj', id=item.id) }}">{{ item.name }}</a></h2>
         </div>
         {% endfor %}
         <h2>All Courses</h2>
-        {% for item in course %}
+        {% for course in courses %}
         <div class="Courses">
-        <h3><a href="{{ url_for('index') }}"></a>{{ item.name }}</h3>
+        <h3><a href="{{ url_for('course', id=course.id) }}">{{ course.coursename }}</a></h3>
         </div>
         {% endfor %}
     </div>

@@ -44,14 +44,14 @@ def index():
 @app.route('/catalog')
 def catalog():
     subject = Subject.query.all()
-    course = Course.query.all()
-    return render_template('catalog.html.j2',subject=subject, course=course)
+    courses = Course.query.all()
+    return render_template('catalog.html.j2',subject=subject, courses=courses)
 
 @app.route('/catalog/<int:id>')
-def catalog_subj(id, related_subj):
+def catalog_subj(id):
     subject = Subject.query.get(id)
-    course = Course.query.get(related_subj)
-    return render_template('catalog_subj.html.j2', subject=subject, course=course)
+    courses = Course.query.filter(Course.related_subj == Subject.id)
+    return render_template('catalog_subj.html.j2', subject=subject, courses=courses)
 
 
 @app.route('/course/<int:id>')

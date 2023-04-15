@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from hashlib import md5
 from app import app, db, login
 import jwt
-
+from sqlalchemy import Enum
 from flask_login import UserMixin
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -23,11 +23,13 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
+    enrollments = db.relationship('Enrollment', backref='user')
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+    
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -71,10 +73,10 @@ class User(UserMixin, db.Model):
         try:
             id = jwt.decode(token, app.config["SECRET_KEY"], algorithms="HS256")[
                 "reset_password"]
-        except:           
+        except:
             return None
         return User.query.get(id)
-
+    
 
 @login.user_loader
 def load_user(id):
@@ -89,3 +91,49 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
+
+
+class Subject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40))
+    type = db.Enum('language', 'other', default='other', nullable=False)
+
+
+
+class Course(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    coursename = db.Column(db.String(200))
+    description = db.Column(db.String(600))
+    chapters = db.relationship('Chapter', backref='course', lazy=True)
+    related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    subject = db.relationship("Subject", backref="course", lazy=True)
+    enrollments = db.relationship('Enrollment', backref='course')
+
+
+class Chapter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+    lessons = db.relationship('Lesson', backref='chapter', lazy=True)
+
+
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    projectname = db.Column(db.String(200))
+    description = db.Column(db.String(600))
+    courseid = db.Column(db.Integer, db.ForeignKey('course.id'))
+    course = db.relationship('Course', backref='project')
+
+
+class Lesson(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    subject = db.relationship("Subject", backref="lesson", lazy=True)
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
+
+
+class Enrollment(db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), primary_key=True)
+

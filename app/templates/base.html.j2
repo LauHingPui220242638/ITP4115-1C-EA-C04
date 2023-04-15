@@ -25,12 +25,12 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     {% if user == current_user: %}
-                    <li>
-                        <a href="{{ url_for('index') }}">{{ _('My home') }}</a>
-                    </li>
+                        <li>
+                            <a href="{{ url_for('index') }}">{{ _('My home') }}</a>
+                        </li>
                     {% endif %}
                     <li>
-                        <a href="{{ url_for('index') }}">{{ _('Catalog') }}</a>
+                        <a href="{{ url_for('catalog') }}">{{ _('Catalog') }}</a>
                     </li>
                     <li>
                         <a href="{{ url_for('index') }}">{{ _('Resources') }}</a>
@@ -49,6 +49,9 @@
                     {% if current_user.is_anonymous %}
                         <li>
                             <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('register') }}">{{ _('Sign Up') }}</a>
                         </li>
                     {% else %}
                         <li>

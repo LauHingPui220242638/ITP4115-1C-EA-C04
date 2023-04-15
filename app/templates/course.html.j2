@@ -1,0 +1,22 @@
+{% extends "base.html.j2" %}
+{% block app_content %}
+    <table class="table table-hover">
+    <tr>
+    <h1>{{ course.coursename }}</h1>
+    {{ course.description }}
+    <h2>Chapters</h2>
+    <ul>
+        {% for chapter in course.chapters %}
+            <li>
+                {{ chapter.title }}
+                <ul>
+                    {% for lesson in chapter.lessons %}
+                    <li>{{ lesson.title }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </tr>
+    </table>
+        {% endfor %}
+    </ul>
+{% endblock %}

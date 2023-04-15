@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post
+from app.models import User, Course, Subject, Post, Enrollment
 from app.email import send_password_reset_email
 
 
@@ -39,6 +39,28 @@ def index():
     return render_template('index.html.j2', title=_('Home'), form=form,
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
+
+
+@app.route('/catalog')
+def catalog():
+    subject = Subject.query.all()
+    course = Course.query.all()
+    return render_template('catalog.html.j2',subject=subject, course=course)
+
+@app.route('/catalog/<int:id>')
+def catalog_subj(id, related_subj):
+    subject = Subject.query.get(id)
+    course = Course.query.get(related_subj)
+    return render_template('catalog_subj.html.j2',subject=subject, course=course)
+
+
+
+@app.route('/course/<int:id>')
+def course(id):
+    course = Course.query.get(id)
+    if not course:
+        return redirect(url_for('index'))
+    return render_template('course.html.j2', course=course)
 
 
 @app.route('/explore')
@@ -190,8 +212,28 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
-#test catalog code
-#@app.route('/course/unenroll')
-#@login_required
-def unenroll(username):
-    currnet_course
+# test catalog code
+@app.route('/enroll/<int:id>', methods=['POST'])
+@login_required
+def enroll(id):
+    course = Course.query.get(id)
+    if course is None:
+        flash(_('Course not found.'))
+    enrollment = Enrollment(user=user, course=course)
+    db.session.add(enrollment)
+    db.session.commit()
+    flash(_('You are have enrolled the course!'))
+    return redirect(url_for('course', id=id))
+
+
+@app.route('/unenroll/<int:id>', methods=['POST'])
+@login_required
+def unenroll(id):
+    course = Course.query.get(id)
+    if course is None:
+        flash(_('Course not found.'))
+    enrollment = Enrollment(user=user, course=course)
+    db.session.delete(enrollment)
+    db.session.commit()
+    flash(_('You have unenroll from the course.'))
+    return redirect(url_for('course', id=id))

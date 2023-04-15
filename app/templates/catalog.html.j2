@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}
+{% block app_content %}
+<h1>Explore the Catalog</h1>
+    <div class="catalog">
+        <h2>popular subjects and languages</h2>
+        {% for item in subject %}
+        <div class="Subjects">
+        <h2><a href="{{ url_for('index') }}">{{ item.name }}</a></h2>
+        </div>
+        {% endfor %}
+        <h2>courses</h2>
+        {% for item in course %}
+        <div class="Courses">
+        <h3><a href="{{ url_for('course', id=course.id) }}"></a>{{ item.name }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

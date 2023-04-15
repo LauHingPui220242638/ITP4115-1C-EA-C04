@@ -6,5 +6,5 @@
 ## Duty
  - [ ] Webpage base
  - [ ] Cataloge Table
- - [ ] Document Table
- - [ ] Career paths
+ - [ ] Course Table
+ - [ ] Enrollment system(at least something seem like it)

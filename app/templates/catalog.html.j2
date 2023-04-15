@@ -11,7 +11,7 @@
         <h2>courses</h2>
         {% for item in course %}
         <div class="Courses">
-        <h3><a href="{{ url_for('course', id=course.id) }}"></a>{{ item.name }}</h3>
+        <h3><a href="{{ url_for('index') }}"></a>{{ item.name }}</h3>
         </div>
         {% endfor %}
     </div>

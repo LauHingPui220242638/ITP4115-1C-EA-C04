@@ -50,9 +50,8 @@ def catalog():
     language = Subject.query.filter(Subject.type == 'Language')
     other = Subject.query.filter(Subject.type == 'Other')
     career = Course.query.filter(Course.Path == 'Career')
-    skills = Course.query.filter(Course.Path == 'Skill')
     courses = Course.query.filter(Course.Path == 'None')
-    return render_template('catalog.html.j2', subject=subject, career=career, skills=skills,
+    return render_template('catalog.html.j2', subject=subject, career=career,
                            language=language,other=other, courses=courses)
 
 @app.route('/catalog/all')

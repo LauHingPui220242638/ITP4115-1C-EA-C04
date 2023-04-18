@@ -40,8 +40,9 @@
             </div>
             <div class="col-md-9">
                 <h1>Explore the Catalog</h1>
+                <br>
                 <div class="catalog">
-                    <h2>Popular Subjects and Languages</h2>
+                    <h3>Popular Subjects and Languages</h3>
                     <div class="Subjects_cat">
                         {% for subject in subject %}
                             <div class="Subjects">
@@ -51,7 +52,7 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <h2>All Career Paths</h2>
+                    <h3>Top Career Paths</h3>
                     {% for career in career %}
                         <div class="Career">
                             <h3>
@@ -59,15 +60,7 @@
                             </h3>
                         </div>
                     {% endfor %}
-                    <h2>All Skill Paths</h2>
-                    {% for skills in skills %}
-                        <div class="Skills">
-                            <h3>
-                                <a href="{{ url_for('course', id=skills.id) }}">{{ skills.coursename }}</a>
-                            </h3>
-                        </div>
-                    {% endfor %}
-                    <h2>All Courses</h2>
+                    <h2>Most Popular Courses</h2>
                     {% for course in courses %}
                         <div class="Courses">
                             <h3>
@@ -75,6 +68,7 @@
                             </h3>
                         </div>
                     {% endfor %}
+                    <h2>Get Inspired</h2>
                 </div>
             </div>
         </div>

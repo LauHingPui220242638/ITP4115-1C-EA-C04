@@ -1,18 +1,82 @@
 {% extends "base.html.j2" %}
 {% block app_content %}
-    <h1>Explore the Catalog</h1>
-    <div class="catalog">
-        <h2>popular subjects and languages</h2>
-        {% for item in subject %}
-        <div class="Subjects">
-        <h2><a href="{{ url_for('catalog_subj', id=item.id) }}">{{ item.name }}</a></h2>
+    <style>
+      .Subjects_cat {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px
+      }
+    </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <h2>Languages</h2>
+                    <div class="Languages">
+                        {% for language in language %}
+                            <div class="Language">
+                                <h4>
+                                    <a href="{{ url_for('catalog_subj', id=language.id) }}">{{ language.name }}</a>
+                                </h4>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <h2>Subjects</h2>
+                    <div class="Others">
+                        {% for other in other %}
+                            <div class="Others">
+                                <h4>
+                                    <a href="{{ url_for('catalog_subj', id=other.id) }}">{{ other.name }}</a>
+                                </h4>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <h4>
+                    <a href="{{ url_for('catalog_cour') }}">Full Catalog</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h1>Explore the Catalog</h1>
+                <div class="catalog">
+                    <h2>Popular Subjects and Languages</h2>
+                    <div class="Subjects_cat">
+                        {% for subject in subject %}
+                            <div class="Subjects">
+                                <h2>
+                                    <a href="{{ url_for('catalog_subj', id=subject.id) }}">{{ subject.name }}</a>
+                                </h2>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <h2>All Career Paths</h2>
+                    {% for career in career %}
+                        <div class="Career">
+                            <h3>
+                                <a href="{{ url_for('course', id=career.id) }}">{{ career.coursename }}</a>
+                            </h3>
+                        </div>
+                    {% endfor %}
+                    <h2>All Skill Paths</h2>
+                    {% for skills in skills %}
+                        <div class="Skills">
+                            <h3>
+                                <a href="{{ url_for('course', id=skills.id) }}">{{ skills.coursename }}</a>
+                            </h3>
+                        </div>
+                    {% endfor %}
+                    <h2>All Courses</h2>
+                    {% for course in courses %}
+                        <div class="Courses">
+                            <h3>
+                                <a href="{{ url_for('course', id=course.id) }}">{{ course.coursename }}</a>
+                            </h3>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        {% endfor %}
-        <h2>All Courses</h2>
-        {% for course in courses %}
-        <div class="Courses">
-        <h3><a href="{{ url_for('course', id=course.id) }}">{{ course.coursename }}</a></h3>
         </div>
-        {% endfor %}
-    </div>
-{% endblock %}
+    {% endblock %}

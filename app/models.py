@@ -1,4 +1,4 @@
-
+from sqlalchemy.orm import validates
 from datetime import datetime, timedelta, timezone
 from hashlib import md5
 from app import app, db, login
@@ -28,7 +28,6 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-    
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -75,7 +74,7 @@ class User(UserMixin, db.Model):
         except:
             return None
         return User.query.get(id)
-    
+
 
 @login.user_loader
 def load_user(id):
@@ -96,7 +95,14 @@ class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))
     description = db.Column(db.String(600))
-    type = db.Enum('language', 'other', default='other', nullable=False)
+    type = db.Column(db.String(50), nullable=False)
+    course = db.relationship("Course", backref="subject", lazy=True)
+
+    @validates('type')
+    def validate_type(self, key, value):
+        if value not in ['Language', 'Other']:
+            raise ValueError('Invalid path')
+        return value
 
 
 class Course(db.Model):
@@ -105,14 +111,21 @@ class Course(db.Model):
     description = db.Column(db.String(600))
     chapters = db.relationship('Chapter', backref='course', lazy=True)
     project = db.relationship('Project', backref='course')
+    Path = db.Column(db.String(50), nullable=False)
     related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
-    subject = db.relationship("Subject", backref="course", lazy=True)
+
+    @validates('path')
+    def validate_path(self, key, value):
+        if value not in ['Career', 'Skill', 'None']:
+            raise ValueError('Invalid path')
+        return value
 
 
 class Chapter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey(
+        'course.id'), nullable=False)
     lessons = db.relationship('Lesson', backref='chapter', lazy=True)
 
 
@@ -128,5 +141,5 @@ class Lesson(db.Model):
     name = db.Column(db.String(200))
     related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
     subject = db.relationship("Subject", backref="lesson", lazy=True)
-    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
-
+    chapter_id = db.Column(db.Integer, db.ForeignKey(
+        'chapter.id'), nullable=False)

@@ -5,19 +5,24 @@ from app.models import Subject, Course, Chapter, Project, Lesson
 app_context = app.app_context()
 app_context.push()
 
+
 s1 = Subject(id=1, name='Python',
-             description='Python is a general-purpose, versatile, and powerful programming language.', type='langange')
+             description='Python is a general-purpose, versatile, and powerful programming language.', type='Language')
 s2 = Subject(id=2, name='HTML/CSS',
              description='HTML is the foundation of all web pages. It defines the structure of a page, while CSS defines its style',
-             type='langange')
+             type='Language')
 s3 = Subject(id=3, name='AI',
              description='Artificial intelligence (AI) uses computers and other machines to accomplish complicated tasks typically associated with the human mind — like problem-solving and decision-making.',
-             type='other')
+             type='Other')
+s4 = Subject(id=4, name='Web Development',
+             description='Web Development is the practice of developing websites and web apps that live on the internet.',
+             type='Other')
 db.session.add(s1)
 db.session.add(s2)
 db.session.add(s3)
+db.session.add(s4)
 c1 = Course(id=1, coursename='Learn Python 3',
-            description='Learn the basics of Python 3.',related_subj =1, Path = None)
+            description='Learn the basics of Python 3.',related_subj =1, Path = 'None')
 c2 = Course(id=2, coursename='Front-End Engineer',
             description='Learn the basics of Python 3.', related_subj =2, Path = 'Career')
 c3 = Course(id=3, coursename='Machine Learning and AI Fundamentals',

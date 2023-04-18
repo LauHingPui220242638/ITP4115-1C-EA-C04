@@ -4,7 +4,7 @@ from app.models import User, Post
 
 app_context = app.app_context()
 app_context.push()
-db.drop_all()
+#db.drop_all()
 db.create_all()
 
 u1 = User(username='john', email='john@example.com')

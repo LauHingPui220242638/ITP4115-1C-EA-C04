@@ -5,8 +5,8 @@
 
 ## Duty
  - [ ] Webpage base
- - [ ] Catalog
- - [ ] Course
+ - [x] Catalog
+ - [x] Course
 
 ## Note to other members
  -If you needed to use my code here for testing, Please run test_data.py and test_course.py first!

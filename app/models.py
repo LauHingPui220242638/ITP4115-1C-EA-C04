@@ -101,7 +101,7 @@ class Subject(db.Model):
     @validates('type')
     def validate_type(self, key, value):
         if value not in ['Language', 'Other']:
-            raise ValueError('Invalid path')
+            raise ValueError('Invalid type')
         return value
 
 
@@ -111,10 +111,10 @@ class Course(db.Model):
     description = db.Column(db.String(600))
     chapters = db.relationship('Chapter', backref='course', lazy=True)
     project = db.relationship('Project', backref='course')
-    Path = db.Column(db.String(50), nullable=False)
+    Path = db.Column(db.String(10), nullable=False)
     related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
 
-    @validates('path')
+    @validates('Path')
     def validate_path(self, key, value):
         if value not in ['Career', 'Skill', 'None']:
             raise ValueError('Invalid path')

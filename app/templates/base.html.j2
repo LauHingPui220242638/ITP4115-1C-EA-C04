@@ -44,6 +44,11 @@
                     <li>
                         <a href="{{ url_for('index') }}">{{ _('Business Solutions') }}</a>
                     </li>
+                    {% if current_user.username == 'Admin': %}
+                        <li>
+                            <a href="{{ url_for('Admin') }}">{{ _('Admin Options') }}</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}

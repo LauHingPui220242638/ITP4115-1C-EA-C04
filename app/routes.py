@@ -7,7 +7,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Course, Subject, Post
+from app.models import User, Course, Subject, Post, Project
 from app.email import send_password_reset_email
 
 
@@ -229,3 +229,23 @@ def unfollow(username):
     db.session.commit()
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
+
+
+#New code
+@app.route('/projects')
+def Projects():
+    subject = Subject.query.all()
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    projects = Project.query.all()
+    return render_template('projects.html.j2', title=_('Projects'), subject=subject,
+     language=language, other=other, projects=projects)
+
+
+@app.route('/projects/<int:id>')
+def Projects_subj(id):
+    subject = Subject.query.get(id)
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    projects = Project.query.filter(Project.related_subj == id)
+    return render_template('projects_subj.html.j2', subject=subject, language=language, other=other, projects=projects)

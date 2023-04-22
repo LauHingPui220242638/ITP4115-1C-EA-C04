@@ -97,6 +97,7 @@ class Subject(db.Model):
     description = db.Column(db.String(600))
     type = db.Column(db.String(50), nullable=False)
     course = db.relationship("Course", backref="subject", lazy=True)
+    project = db.relationship("Project", backref="subject", lazy=True)
 
     @validates('type')
     def validate_type(self, key, value):
@@ -134,6 +135,7 @@ class Project(db.Model):
     projectname = db.Column(db.String(200))
     description = db.Column(db.String(600))
     courseid = db.Column(db.Integer, db.ForeignKey('course.id'))
+    related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
 
 
 class Lesson(db.Model):

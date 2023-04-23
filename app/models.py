@@ -150,20 +150,6 @@ class Lesson(db.Model):
 
 
 # ---------------------------- LAU HING PUI START FROM HERE ---------------------------- #
-# class User(UserMixin, db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(64), index=True, unique=True)
-#     email = db.Column(db.String(120), index=True, unique=True)
-#     password_hash = db.Column(db.String(128))
-#     topics = db.relationship('Topic', backref='user', lazy=True) 
-#     replys = db.relationship('Reply', backref='user', lazy=True) 
-#     about_me = db.Column(db.String(140))
-#     followed = db.relationship(
-#         'User', secondary=followers,
-#         primaryjoin=(followers.c.follower_id == id),
-#         secondaryjoin=(followers.c.followed_id == id),
-#         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-
 
 
 class ForumCat(db.Model):

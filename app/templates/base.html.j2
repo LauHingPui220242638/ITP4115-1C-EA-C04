@@ -52,7 +52,7 @@
                     <li>
                         <a href="{{ url_for('index') }}">{{ _('Business Solutions') }}</a>
                     </li>
-                    {% if current_user.username == 'Admin': %}
+                    {% if current_user.is_admin == True: %}
                         <li>
                             <a href="{{ url_for('Admin') }}">{{ _('Admin Options') }}</a>
                         </li>

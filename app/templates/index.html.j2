@@ -23,4 +23,12 @@
             </li>
         </ul>
     </nav>
+    <h3>Most Popular Courses</h3>
+    {% for course in courses %}
+    <div class="Courses">
+        <h3>
+            <a href="{{ url_for('course', id=course.id) }}">{{ course.coursename }}</a>
+        </h3>
+    </div>
+    {% endfor %}
 {% endblock %}

@@ -37,9 +37,10 @@ def index():
         'index', page=posts.next_num) if posts.next_num else None
     prev_url = url_for(
         'index', page=posts.prev_num) if posts.prev_num else None
+    courses = Course.query.filter(Course.Path == 'None')
     return render_template('index.html.j2', title=_('Home'), form=form,
                            posts=posts.items, next_url=next_url,
-                           prev_url=prev_url)
+                           prev_url=prev_url, courses=courses)
 
 
 @app.route('/explore')
@@ -196,14 +197,14 @@ def unfollow(username):
 @app.route('/admin')
 @login_required
 def Admin():
-    if current_user.username != 'Admin':
+    if current_user.is_admin == False:
         return redirect(url_for('index'))
     return render_template('admin.html.j2', title=_('Admin Options'))
 
 @app.route('/admin/Subjects', methods=['GET', 'POST'])
 @login_required
 def Add_Subjects():
-        if current_user.username != 'Admin':
+        if current_user.is_admin == False:
             return redirect(url_for('index'))
         form = AddSubjectForm()
         if form.validate_on_submit():
@@ -220,7 +221,7 @@ def Add_Subjects():
 @app.route('/admin/Courses', methods=['GET', 'POST'])
 @login_required
 def Add_Courses():
-        if current_user.username != 'Admin':
+        if current_user.is_admin == False:
             return redirect(url_for('index'))
         form = AddCourseForm()
         if form.validate_on_submit():
@@ -238,7 +239,7 @@ def Add_Courses():
 @app.route('/admin/Chapters', methods=['GET', 'POST'])
 @login_required
 def Add_Chapters():
-        if current_user.username != 'Admin':
+        if current_user.is_admin == False:
             return redirect(url_for('index'))
         form = AddChapterForm()
         if form.validate_on_submit():
@@ -255,7 +256,7 @@ def Add_Chapters():
 @app.route('/admin/Lessons', methods=['GET', 'POST'])
 @login_required
 def Add_Lessons():
-        if current_user.username != 'Admin':
+        if current_user.is_admin == False:
             return redirect(url_for('index'))
         form = AddLessonForm()
         if form.validate_on_submit():

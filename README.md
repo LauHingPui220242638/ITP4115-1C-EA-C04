@@ -14,6 +14,7 @@
 
 - [x] Forum Page
 - [x] Forum Category Table
+- [x] Forum Tag Table
 - [x] Topic Table
 - [x] Reply Table
 - [ ] User Table

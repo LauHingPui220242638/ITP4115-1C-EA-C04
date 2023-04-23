@@ -1,0 +1,74 @@
+body{
+    /* background-color: #f3fbff; */
+    margin: 0;
+    font-family:Suisse ,sans-serif;
+    font-size: 1rem;
+    font-weight: lighter;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+#main {
+    background-image: url(https://global.discourse-cdn.com/codecademy/original/5X/3/4/c/9/34c90ff87690892cda0a1b2f645cba8df1300468.svg);
+    background-size:auto;
+}
+.parent_id{
+    /* display: none; */
+}
+
+.bkcolor {
+    background-color: #f3fbff;
+
+}
+.navbar-nav > li{
+    padding-left:20px;
+    padding-right:20px;
+  }
+#search{
+    margin-bottom: 0;
+
+}
+
+.arrow-svg{
+    background-image: url(https://global.discourse-cdn.com/codecademy/original/5X/5/1/e/a/51eabb3da26f0f8d21944c9cee7b2a6a54b26263.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: .6875em;
+    width: .69875em;
+}
+.banner-link-container {
+    display: flex;
+    align-items: center;
+    line-height: 250%;
+    padding: 0px 30px;
+}
+.banner-links {
+    
+    font-family: "Apercu";
+    font-weight: bold;
+    text-decoration-line: underline;
+    line-height: 250%;
+    display: flex; 
+    justify-content: space-around;
+    width: 27rem;
+    justify-content: center;
+}
+
+footer{
+    padding: 50px;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+
+
+
+
+

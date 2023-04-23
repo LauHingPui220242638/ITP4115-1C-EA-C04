@@ -1,0 +1,75 @@
+<script>
+function content_vis_toggle(reply_id){
+    const target_id = "reply_content_" + reply_id
+    const target_ele = document.getElementById(target_id)
+    const target_form_id = "reply_content_form_" + reply_id
+    const target_form_ele = document.getElementById(target_form_id)
+    if (target_ele.classList.contains("d-none") == true){
+        target_ele.classList.remove("d-none");
+        target_form_ele.classList.add("d-none");
+
+    }else{
+        target_ele.classList.add("d-none");
+        target_form_ele.classList.remove("d-none");
+    }
+}
+</script>
+
+<div class="my-1 py-3 list-group-item w-100 list-group-item-action" aria-current="true">
+
+
+<div class="d-flex w-100 justify-content-between">
+            
+    <div class="row w-100">
+
+        <div class="col-2">
+            <h5 class="mb-1 text-center display-5">{{ reply.author }}</h5>
+        </div>
+    
+        
+    
+
+
+
+
+    <div class="col-9">
+        
+        <div>
+            Rid : {{ reply.id}}
+            Date : {{ reply.date}} 
+        </div>
+        <form action="" method="post" class="mb-0" >
+        {{ reply.form.reply_active(value=reply.id, class="d-none") }}
+        <div id="reply_content_{{reply.id}}" class="fs-5">{{ reply.content}}</div>
+
+        <div id="reply_content_form_{{reply.id}}" class="fs-5 d-none ">{{ 
+            reply.form.content(class="form-control")
+            }}
+        </div>
+
+        <div class="d-flex align-items-center justify-content-end">
+            <button type="button" onclick="content_vis_toggle({{reply.id}});" class="btn btn-outline-warning rounded-pill">
+            ...
+            </button>
+            
+            
+            {{reply.form.submit(class="btn btn-outline-danger rounded-pill",method="post")}}
+            
+
+            <button type="button" onclick="location.href='{{ url_for('forum.delete_reply', reply_id=reply.id) }}'" class="btn btn-outline-danger rounded-pill">
+            X
+            </button>
+
+        </form>
+        </div>
+
+    
+
+        
+    </div>
+    </div>
+
+
+</div>
+</div>
+

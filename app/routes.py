@@ -6,8 +6,13 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
+<<<<<<< HEAD
     ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User, Course, Subject, Post, Project
+=======
+    ResetPasswordRequestForm, ResetPasswordForm, AddSubjectForm, AddCourseForm, AddChapterForm, AddLessonForm
+from app.models import User, Course, Subject, Post, Chapter, Lesson
+>>>>>>> origin/main
 from app.email import send_password_reset_email
 
 
@@ -37,48 +42,10 @@ def index():
         'index', page=posts.next_num) if posts.next_num else None
     prev_url = url_for(
         'index', page=posts.prev_num) if posts.prev_num else None
+    courses = Course.query.filter(Course.Path == 'None')
     return render_template('index.html.j2', title=_('Home'), form=form,
                            posts=posts.items, next_url=next_url,
-                           prev_url=prev_url)
-
-
-
-
-@app.route('/catalog')
-def catalog():
-    subject = Subject.query.all()
-    language = Subject.query.filter(Subject.type == 'Language')
-    other = Subject.query.filter(Subject.type == 'Other')
-    career = Course.query.filter(Course.Path == 'Career')
-    courses = Course.query.filter(Course.Path == 'None')
-    return render_template('catalog.html.j2', subject=subject, career=career,
-                           language=language,other=other, courses=courses)
-
-@app.route('/catalog/all')
-def catalog_cour():
-    subject = Subject.query.all()
-    language = Subject.query.filter(Subject.type == 'Language')
-    other = Subject.query.filter(Subject.type == 'Other')
-    career = Course.query.filter(Course.Path == 'Career')
-    skills = Course.query.filter(Course.Path == 'Skill')
-    courses = Course.query.filter(Course.Path == 'None')
-    return render_template('catalog_cour.html.j2', subject=subject, career=career, skills=skills,
-                           language=language,other=other, courses=courses)
-
-
-@app.route('/catalog/<int:id>')
-def catalog_subj(id):
-    subject = Subject.query.get(id)
-    courses = Course.query.filter(Course.related_subj == id)
-    return render_template('catalog_subj.html.j2', subject=subject, courses=courses)
-
-
-@app.route('/course/<int:id>')
-def course(id):
-    course = Course.query.get(id)
-    if not course:
-        return redirect(url_for('index'))
-    return render_template('course.html.j2', course=course)
+                           prev_url=prev_url, courses=courses)
 
 
 @app.route('/explore')
@@ -249,3 +216,117 @@ def Projects_subj(id):
     other = Subject.query.filter(Subject.type == 'Other')
     projects = Project.query.filter(Project.related_subj == id)
     return render_template('projects_subj.html.j2', subject=subject, language=language, other=other, projects=projects)
+#new codes
+@app.route('/admin')
+@login_required
+def Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
+    return render_template('admin.html.j2', title=_('Admin Options'))
+
+@app.route('/admin/Subjects', methods=['GET', 'POST'])
+@login_required
+def Add_Subjects():
+        if current_user.is_admin == False:
+            return redirect(url_for('index'))
+        form = AddSubjectForm()
+        if form.validate_on_submit():
+            last_subject = Subject.query.order_by(Subject.id.desc()).first()
+            subject = Subject(id=last_subject.id + 1,
+                               name=form.name.data, description=form.desc.data, type=form.type.data)
+            db.session.add(subject)
+            db.session.commit()
+            flash(_('Subject Added.'))
+            return redirect(url_for('Add_Subjects'))
+        return render_template('ad_option.html.j2', title=_('Add Subject'), form=form)
+
+
+@app.route('/admin/Courses', methods=['GET', 'POST'])
+@login_required
+def Add_Courses():
+        if current_user.is_admin == False:
+            return redirect(url_for('index'))
+        form = AddCourseForm()
+        if form.validate_on_submit():
+            last_course = Course.query.order_by(Course.id.desc()).first()
+            course = Course(id=last_course.id + 1,
+                               coursename=form.name.data, description=form.desc.data,
+                                 Path=form.path.data, related_subj=form.related_subj.data)
+            db.session.add(course)
+            db.session.commit()
+            flash(_('Course Added.'))
+            return redirect(url_for('Add_Courses'))
+        return render_template('ad_option.html.j2', title=_('Add Course'), form=form)
+
+
+@app.route('/admin/Chapters', methods=['GET', 'POST'])
+@login_required
+def Add_Chapters():
+        if current_user.is_admin == False:
+            return redirect(url_for('index'))
+        form = AddChapterForm()
+        if form.validate_on_submit():
+            last_chapter = Chapter.query.order_by(Chapter.id.desc()).first()
+            chapter = Chapter(id=last_chapter.id + 1, title=form.title.data, course_id=form.course_id.data)
+            db.session.add(chapter)
+            db.session.commit()
+            flash(_('Chapter Added.'))
+            return redirect(url_for('Add_Chapters'))
+        
+        return render_template('ad_option.html.j2', title=_('Add Chapter'), form=form)
+
+
+@app.route('/admin/Lessons', methods=['GET', 'POST'])
+@login_required
+def Add_Lessons():
+        if current_user.is_admin == False:
+            return redirect(url_for('index'))
+        form = AddLessonForm()
+        if form.validate_on_submit():
+            last_lesson = Lesson.query.order_by(Lesson.id.desc()).first()
+            lesson = Lesson(id=last_lesson.id + 1, name=form.name.data, 
+                            related_subj=form.related_subj.data, chapter_id=form.chapter_id.data)
+            db.session.add(lesson)
+            db.session.commit()
+            flash(_('Lesson Added.'))
+            return redirect(url_for('Add_Lessons'))
+        
+        return render_template('ad_option.html.j2', title=_('Add Chapter'), form=form)
+
+
+@app.route('/catalog')
+def catalog():
+    subject = Subject.query.all()
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    career = Course.query.filter(Course.Path == 'Career')
+    courses = Course.query.filter(Course.Path == 'None')
+    return render_template('catalog.html.j2', title=_('Catalog'), subject=subject, career=career,
+                           language=language,other=other, courses=courses)
+
+
+@app.route('/catalog/all')
+def catalog_cour():
+    subject = Subject.query.all()
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    career = Course.query.filter(Course.Path == 'Career')
+    skills = Course.query.filter(Course.Path == 'Skill')
+    courses = Course.query.filter(Course.Path == 'None')
+    return render_template('catalog_cour.html.j2', title=_('Full Catalog'), subject=subject, career=career, skills=skills,
+                           language=language,other=other, courses=courses)
+
+
+@app.route('/catalog/<int:id>')
+def catalog_subj(id):
+    subject = Subject.query.get(id)
+    courses = Course.query.filter(Course.related_subj == id)
+    return render_template('catalog_subj.html.j2', title=_(subject.name), subject=subject, courses=courses)
+
+
+@app.route('/course/<int:id>')
+def course(id):
+    course = Course.query.get(id)
+    if not course:
+        return redirect(url_for('index'))
+    return render_template('course.html.j2', title=_(course.coursename), course=course)

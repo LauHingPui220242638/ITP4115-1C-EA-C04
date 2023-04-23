@@ -1,0 +1,74 @@
+<div class="my-1 py-3 list-group-item w-100 list-group-item-action" aria-current="true">
+
+
+<div class="d-flex w-100 justify-content-between">
+            
+    <div class="row w-100">
+
+        <div class="col-2">
+            <h5 class="mb-1 text-center display-5">{{ reply.author }}</h5>
+        </div>
+    
+        
+    
+
+
+
+
+    <div class="col-9">
+        
+        <div>
+            Rid : {{ reply.id}}
+            Date : {{ reply.date}} 
+        </div>
+        <div class="fs-5">{{ reply.content}}</div>
+
+
+        {% if reply.replys.count() > 0 and reply != replys[0] %}
+        <div class="card my-2" style="width: 50vw;">
+            <ul class="list-group list-group-flush">
+            
+            
+            </br>
+            {% for reply_replys in reply.replys %}
+                <li class="list-group-item">{% include "forum_reply_by_reply.html.j2" %}</li>
+                
+            {% endfor %}
+            <div class="card-footer">
+                Reply
+            </div>
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="d-flex align-items-center justify-content-end">
+            <button onclick="location.href='{{ url_for('forum.report_reply', reply_id=reply.id) }}'" class="btn btn-outline-warning rounded-pill"> Report </button>
+
+            <a href="#content">
+            <button  onclick="
+            document.getElementById('parent_id').value = {{reply.id}};
+            " class="btn btn-outline-success rounded-pill"> Reply </button>
+            </a>
+
+            <button onclick="location.href='{{ url_for('forum.like_reply', reply_id=reply.id) }}'" class="btn btn-outline-danger rounded-pill">
+            {% if reply.likable == true %}
+            Like
+            {% else %}
+            Unlike
+            {% endif %}
+            : {{ reply.likecount }} 
+            </button>
+
+            
+        </div>
+
+    
+
+        
+    </div>
+    </div>
+
+
+</div>
+</div>
+

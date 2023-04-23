@@ -21,7 +21,10 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    is_admin = db.Column(db.Boolean(),default=False)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    topics = db.relationship('Topic', backref='user', lazy=True) 
+    replys = db.relationship('Reply', backref='user', lazy=True) 
     about_me = db.Column(db.String(140))
     followed = db.relationship(
         'User', secondary=followers,
@@ -102,7 +105,7 @@ class Subject(db.Model):
     @validates('type')
     def validate_type(self, key, value):
         if value not in ['Language', 'Other']:
-            raise ValueError('Invalid path')
+            raise ValueError('Invalid type')
         return value
 
 
@@ -112,10 +115,10 @@ class Course(db.Model):
     description = db.Column(db.String(600))
     chapters = db.relationship('Chapter', backref='course', lazy=True)
     project = db.relationship('Project', backref='course')
-    Path = db.Column(db.String(50), nullable=False)
+    Path = db.Column(db.String(10), nullable=False)
     related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
 
-    @validates('path')
+    @validates('Path')
     def validate_path(self, key, value):
         if value not in ['Career', 'Skill', 'None']:
             raise ValueError('Invalid path')
@@ -166,3 +169,110 @@ class Article(db.Model):
     subject = db.relationship("Docs", backref="lesson", lazy=True)
     chapter_id = db.Column(db.Integer, db.ForeignKey(
         'chapter.id'), nullable=False)
+
+
+# ---------------------------- LAU HING PUI START FROM HERE ---------------------------- #
+
+
+class ForumCat(db.Model):
+    __tablename__ = 'forumcats'
+    id = db.Column(db.Integer, primary_key=True)
+    forumcatsname = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(400))
+    color = db.Column(db.String(6))
+    is_deleted =  db.Column(db.Boolean, default=False)
+    topics = db.relationship('Topic', backref='forumcats', lazy=True) 
+    tags = db.relationship('ForumTag', backref='forumcats', lazy=True) 
+
+topic_tag = db.Table('topic_tag',
+                    db.Column('topic_id', db.Integer, db.ForeignKey('topics.id')),
+                    db.Column('forumtags_id', db.Integer, db.ForeignKey('forumtags.id'))
+                    )
+
+reply_like = db.Table('reply_like',
+                    db.Column('reply_id', db.Integer, db.ForeignKey('replys.id')),
+                    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+                    )
+class ForumTag(db.Model):
+    __tablename__ = 'forumtags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    forumcat_id =  db.Column(db.Integer, db.ForeignKey('forumcats.id'), nullable=False)
+
+class Topic(db.Model):
+    __tablename__ = 'topics'
+    id = db.Column(db.Integer, primary_key=True)
+    author_id =  db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    forumcat_id =  db.Column(db.Integer, db.ForeignKey('forumcats.id'), nullable=False)
+    title = db.Column(db.String(50))
+    date = db.Column(db.Date, default=datetime.utcnow)
+    votenum = db.Column(db.Integer, default=0)
+    is_deleted =  db.Column(db.Boolean, default=False)
+    replys = db.relationship('Reply', backref='topics') 
+    tags = db.relationship('ForumTag', secondary=topic_tag, backref='topics')
+
+    @staticmethod
+    def create_topic(author_id,forumcat_id,title,content,tagname):
+        topic = Topic(
+        author_id = author_id,
+        forumcat_id = forumcat_id,
+        title = title
+        ) 
+        db.session.add(topic)
+        db.session.commit()
+
+        
+        reply_first = Reply.create_reply(content,topic.id,author_id,0)
+        db.session.add(reply_first)
+        
+        tags = tagname.split("#")
+        tagsappend = []
+        for tag in tags:
+            if len(tag) < 1:
+                continue
+            tag_exist = db.session.query(ForumTag).filter_by(name=tag).first()
+
+            if tag_exist == None:
+                tagsappend.append(
+                    ForumTag(
+                        name=tag,
+                        forumcat_id=forumcat_id
+                    )
+                )
+            else:
+                topic.tags.append(tag_exist)
+                db.session.add(tag)
+        for tag in tagsappend:
+            topic.tags.append(tag)
+            db.session.add(tag)
+        db.session.commit()
+
+
+class Reply(db.Model):
+    __tablename__ = 'replys'
+    id = db.Column(db.Integer, primary_key=True)
+    author_id =  db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    topic_id =  db.Column(db.Integer, db.ForeignKey('topics.id'), nullable=False)
+    content = db.Column(db.String(10000))
+    is_reported =  db.Column(db.Boolean, default=False)
+    is_deleted =  db.Column(db.Boolean, default=False)
+    likers = db.relationship('User', secondary='reply_like',
+                            backref=db.backref('likers', lazy='dynamic'))
+    likenum = db.Column(db.Integer, default=0)
+    date = db.Column(db.Date, default=datetime.utcnow)
+    parent_id = db.Column(db.Integer, db.ForeignKey('replys.id'))
+    replys = db.relationship(
+        'Reply', backref=db.backref('parent', remote_side=[id]),
+        lazy='dynamic') 
+    
+    @staticmethod
+    def create_reply(content,topic_id, author_id, parent_id):
+        reply = Reply(
+            content = content,
+            topic_id = topic_id,
+            author_id = author_id,
+            parent_id = None if parent_id == 0 else parent_id
+        )
+        db.session.add(reply)
+        db.session.commit()
+        return reply

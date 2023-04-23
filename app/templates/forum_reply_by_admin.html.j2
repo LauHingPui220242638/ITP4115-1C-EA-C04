@@ -1,0 +1,27 @@
+{% extends 'forum_base.html.j2' %}
+{% block title %}Forum Admin{% endblock  %}
+
+{% block content %}
+
+<div class="bkcolor d-flex flex-column justify-content-around p-5">
+
+    <h1>Replys</h1>
+    
+    <h4>Reported : {{ reply_count}}</h4>
+</div>
+{% for reply in replys %}
+    {% if reply.is_deleted != true and reply.is_reported == true%}
+    <div class="bkcolor d-flex justify-content-evenly ">
+        <div class="list-group w-75">
+                {% include "forum_admin_reply.html.j2" %}
+        
+        </div>
+    </div>
+    {% else %}
+    {% endif %} 
+{% endfor %}
+
+
+{% endblock %}
+
+

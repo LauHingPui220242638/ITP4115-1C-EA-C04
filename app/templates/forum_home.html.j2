@@ -1,0 +1,17 @@
+{% extends 'forum_base.html.j2' %}
+{% block title %}Home{% endblock  %}
+{% block content %}
+    <div class="bkcolor d-flex justify-content-around p-5">
+        <h1>Category</h1>
+    </div>
+    {% for forumcat in forumcats %}
+        {% if forumcat.is_deleted != true %}
+            <div class="bkcolor d-flex justify-content-evenly ">
+                <div class="list-group w-75">
+                    {% include "forum_category.html.j2" %}
+                </div>
+            </div>
+        {% else %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

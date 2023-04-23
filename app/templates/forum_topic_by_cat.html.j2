@@ -1,0 +1,64 @@
+{% extends 'forum_base.html.j2' %}
+{% block title %}{{ forumcat.forumcatsname }}{% endblock  %}
+{% block content %}
+
+    <div class="bkcolor d-flex justify-content-around p-5">
+        <h1>Topics</h1>
+        {# <button type="button" class="btn btn-primary"> + Topic</button> #}
+
+<div class="bkcolor dropstart" >
+  <button class="btn btn-primary " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+  + Topic</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:50vw;bottom: 0;border-radius:10px;">
+   <form action="" method="post">
+    <div class="  row  mb-3">
+        {# <label for="title" class="col-sm-2 col-form-label">Title</label> #}
+        <div class="py-2 mx-auto col-sm-10">
+            <div class="form-floating">
+            {{ form.title(class="form-control", style="resize: none;")}}
+            <label for="content">Title</label>
+            </div>
+        </div>
+
+        {# <label for="content" class="col-sm-2 col-form-label">Content</label> #}
+        <div class="py-2 mx-auto col-sm-10">
+            <div class="form-floating">
+                {{ form.content(class="form-control" ,placeholder="Leave a comment here" , style="height: 100px")}}
+                <label for="content">Content</label>
+            </div>
+        </div>
+        <div class="py-2 mx-auto col-sm-10">
+            <div class="form-floating">
+            {{ form.tagname(class="form-control", style="resize: none;", placeholder="#prefix")}}
+            <label for="content">Tags</label>
+            </div>
+        </div>
+        <div class="mx-auto text-center col-sm-5">
+            {{ form.submit(class="btn")}}
+        </div>
+    </div>
+        </form>
+  </ul>
+</div>
+    </div>
+
+    
+    
+ 
+
+
+        
+
+
+
+    {% for topic in topics %}
+        <div class="bkcolor d-flex justify-content-evenly ">
+            <div class="list-group w-75">
+                {% if topic.is_deleted != true %}
+                    {% include "forum_topic.html.j2" %}
+                {% else %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

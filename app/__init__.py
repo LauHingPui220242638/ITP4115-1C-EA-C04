@@ -58,3 +58,5 @@ def get_locale():
 
 # You must keep the routes at the end.
 from app import routes, errors
+from app.forum_routes import forum
+app.register_blueprint(forum)

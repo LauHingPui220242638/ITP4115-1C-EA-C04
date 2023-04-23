@@ -1,0 +1,49 @@
+{% extends 'forum_base.html.j2' %}
+{% block title %}{{topic.title}}{% endblock  %}
+
+{% block content %}
+
+<div class="bkcolor d-flex flex-column justify-content-around p-5">
+
+    <h1>Title : {{topic.title}}</h1>
+    <h3>Category :<a href="{{ url_for('forum.forumcats', id=topic.forumcat_id) }}">{{forumcat.forumcatsname}}</a></h3>
+    <h4>Tag : 
+    {% for tag in topic.tags %}
+    {% include "forum_tag.html.j2" %}
+    {% endfor %}
+    </h4>
+</div>
+{% for reply in replys %}
+    <div class="bkcolor d-flex justify-content-evenly ">
+        <div class="list-group w-75">
+        {% if reply.is_deleted != true %}
+                {% include "forum_reply.html.j2" %}
+        
+        {% else %}
+        {% endif %} 
+        </div>
+    </div>
+{% endfor %}
+
+
+<form action="" method="post" class="mb-0 " >
+ {{ form.parent_id(value=0, class="d-none") }}
+<div class="bkcolor  row  mb-0">
+    {# <label for="title" class="col-sm-2 col-form-label">Title</label> #}
+
+    {# <label for="content" class="col-sm-2 col-form-label">Content</label> #}
+    <div class="py-2 mx-auto col-sm-10 w-75">
+        <div class="form-floating">
+            {{ form.content(class="form-control" ,placeholder="Leave a reply here" , style="height: 200px")}}
+            <label for="content">Reply</label>
+        </div>
+    </div>
+    <div class="mx-auto text-center col-sm-5">
+        {{ form.submit(class="btn")}}
+    </div>
+</div>
+</form>
+
+{% endblock %}
+
+

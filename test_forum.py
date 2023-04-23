@@ -4,7 +4,7 @@ from app.models import User, ForumCat, ForumTag, Topic, Reply
 
 app_context = app.app_context()
 app_context.push()
-db.drop_all()
+# db.drop_all()
 db.create_all()
 
 #Forum User
@@ -22,9 +22,9 @@ db.session.commit()
 
 
 #Forum Category
-fc1 = ForumCat(color= "A432FF",forumcatsname = "HQ Announcements", description = "Here is where you’ll find the latest updates from The Codecademy Team. We will announce things like new product features, curriculum releases, and even site outages.")
-fc2 = ForumCat(color= "5527F2",forumcatsname = "Getting Started", description = "New to the Forums? Orient yourself, get the tools, and learn the rules that will help make these Forums a helpful resource on your learning journey.")
-fc3 = ForumCat(color= "5C50F5",forumcatsname = "Get Help", description = "Ask questions, get help with an exercise, and chat about your Codecademy coursework here. Click in for language-specific topic pages.")
+fc1 = ForumCat(color= "AF325A",forumcatsname = "HQ Announcements", description = "Here is where you’ll find the latest updates from The Codecademy Team. We will announce things like new product features, curriculum releases, and even site outages.")
+fc2 = ForumCat(color= "F52702",forumcatsname = "Getting Started", description = "New to the Forums? Orient yourself, get the tools, and learn the rules that will help make these Forums a helpful resource on your learning journey.")
+fc3 = ForumCat(color= "0C5F05",forumcatsname = "Get Help", description = "Ask questions, get help with an exercise, and chat about your Codecademy coursework here. Click in for language-specific topic pages.")
 
 db.session.add_all([
     fc1,fc2,fc3,

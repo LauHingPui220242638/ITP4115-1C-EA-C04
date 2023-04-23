@@ -67,7 +67,8 @@ def topic(id):
         reply.author = User.query.get(reply.author_id).username
         reply.likecount = len(likers)
         reply.likable = False if current_user in likers else True
-    resp = make_response(render_template('forum_reply_by_topic.html.j2', topic=topic, replys=replys, forumcat=forumcat, form=form ))
+    render = render_template('forum_reply_by_topic.html.j2', topic=topic, replys=replys, forumcat=forumcat, form=form )
+    resp = make_response(render)
     resp.set_cookie("topic_last",value=id,max_age=1000)
     return resp
 
@@ -161,12 +162,12 @@ def like_reply():
     likers = reply.likers
     likable = False if current_user in likers else True
     if likable == True :
-        reply.likenum += 1
+        # reply.likenum += 1
         likers.append(current_user)
         db.session.commit()
         return redirect(request.referrer)
     else:
-        reply.likenum -= 1
+        # reply.likenum -= 1
         likers.remove(current_user)
         db.session.commit()
         return redirect(request.referrer)

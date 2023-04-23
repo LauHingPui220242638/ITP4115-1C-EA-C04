@@ -56,7 +56,7 @@ function content_vis_toggle(reply_id){
             {{reply.form.submit(class="btn btn-outline-danger rounded-pill",method="post")}}
             
 
-            <button onclick="location.href='{{ url_for('forum.delete_reply', reply_id=reply.id) }}'" class="btn btn-outline-danger rounded-pill">
+            <button type="button" onclick="location.href='{{ url_for('forum.delete_reply', reply_id=reply.id) }}'" class="btn btn-outline-danger rounded-pill">
             X
             </button>
 

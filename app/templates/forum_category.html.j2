@@ -1,0 +1,13 @@
+
+
+
+<a href="{{ url_for('forum.forumcats',id=forumcat.id) }}"
+   class="list-group-item w-100 list-group-item-action"
+   aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ forumcat.forumcatsname }}</h5>
+        <small><span class="dot" style="background-color: #{{forumcat.color}};"></span></small>
+    </div>
+    <p class="mb-1"> </br></p>
+    <small> {{ forumcat.description }} likes</small>
+</a>

@@ -11,12 +11,12 @@
 ## Duty
 
 ### Lau Hing Pui
-- [ ] Home Page
-- [ ] Forum Page
-- [ ] User Login
+
+- [x] Forum Page
+- [x] Forum Category Table
+- [x] Topic Table
+- [x] Reply Table
 - [ ] User Table
-- [ ] Post Table
-- [ ] Reply Table
 
 ### Wong Chun Ting
  - [ ] Webpage base

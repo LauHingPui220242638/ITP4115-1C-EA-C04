@@ -122,6 +122,7 @@ class Course(db.Model):
         return value
 
 
+
 class Chapter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -143,5 +144,25 @@ class Lesson(db.Model):
     name = db.Column(db.String(200))
     related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
     subject = db.relationship("Subject", backref="lesson", lazy=True)
+    chapter_id = db.Column(db.Integer, db.ForeignKey(
+        'chapter.id'), nullable=False)
+
+#new code
+class Topic(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    description = db.Column(db.String(600))
+    related_subj = db.Column(db.Integer, db.ForeignKey('topic.id'))
+    subject = db.relationship("Docs", backref="lesson", lazy=True)
+    chapter_id = db.Column(db.Integer, db.ForeignKey(
+        'chapter.id'), nullable=False)
+    
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    author = db.Column(db.String(100))
+    description = db.Column(db.String(6000))
+    related_subj = db.Column(db.Integer, db.ForeignKey('article.id'))
+    subject = db.relationship("Docs", backref="lesson", lazy=True)
     chapter_id = db.Column(db.Integer, db.ForeignKey(
         'chapter.id'), nullable=False)

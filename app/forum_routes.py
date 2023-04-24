@@ -1,4 +1,5 @@
 from flask import render_template,url_for, redirect, Blueprint, request, make_response
+from sqlalchemy import desc
 from random import random
 from app import app, db
 from app.models import User, ForumCat, ForumTag, Topic, Reply 
@@ -61,10 +62,10 @@ def topic(id):
     topic = Topic.query.get(id)
     form = ReplyForm()
     forumcat = ForumCat.query.get(topic.forumcat_id)
-    replys = topic.replys
+    replys = db.session.query(Reply).filter_by(topic_id= id).order_by(desc(Reply.date)).all()
     for reply in replys:
-        likers = reply.likers
         reply.author = User.query.get(reply.author_id).username
+        likers = reply.likers
         reply.likecount = len(likers)
         reply.likable = False if current_user in likers else True
     render = render_template('forum_reply_by_topic.html.j2', topic=topic, replys=replys, forumcat=forumcat, form=form )
@@ -162,12 +163,12 @@ def like_reply():
     likers = reply.likers
     likable = False if current_user in likers else True
     if likable == True :
-        # reply.likenum += 1
+        reply.likenum += 1
         likers.append(current_user)
         db.session.commit()
         return redirect(request.referrer)
     else:
-        # reply.likenum -= 1
+        reply.likenum -= 1
         likers.remove(current_user)
         db.session.commit()
         return redirect(request.referrer)

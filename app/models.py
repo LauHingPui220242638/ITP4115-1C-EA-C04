@@ -237,7 +237,7 @@ class Reply(db.Model):
     likers = db.relationship('User', secondary='reply_like',
                             backref=db.backref('likers', lazy='dynamic'))
     likenum = db.Column(db.Integer, default=0)
-    date = db.Column(db.Date, default=datetime.utcnow)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
     parent_id = db.Column(db.Integer, db.ForeignKey('replys.id'))
     replys = db.relationship(
         'Reply', backref=db.backref('parent', remote_side=[id]),

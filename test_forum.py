@@ -69,6 +69,14 @@ r4 = Reply.create_reply("""
 Great work Codecademy Team
 """,1,1,2)
 
+r5 = Reply.create_reply("""
+:fire: I hate admin :( !!
+""",2,2,0)
+
+
+r6 = Reply.create_reply("""
+:fire: this forum is so godd <3
+""",3,3,0)
 
 t1 = ForumTag(name="geek",forumcat_id=1)
 t2 = ForumTag(name="code",forumcat_id=1)

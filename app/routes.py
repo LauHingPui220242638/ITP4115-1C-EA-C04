@@ -355,5 +355,10 @@ def articles():
     return render_template('article_list.html.j2', title=_('Articles'), subject=subject, career=career,
                            language=language,other=other, courses=courses)
 
+# @app.route('/docs/<int:id>')
+# def doc_topic(id):
+#     topics = ConceptTopic.query.all()
+#     cur_topic = ConceptTopic.query.get(id)
+#     return render_template('docs_topic.html.j2', title=_(cur_topic.name),cur_topic=cur_topic, topics=topics)
 #article_subj
 #article

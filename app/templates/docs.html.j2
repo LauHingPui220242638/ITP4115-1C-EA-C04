@@ -1,0 +1,41 @@
+{% extends "base.html.j2" %}
+{% block app_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <h1>Topic</h1>
+                    {% for topic in topics %}
+                        <div class="topic">
+                            <h4>
+                                <a href="{{ url_for('doc_topic', id=topic.id) }}">{{ topic.name }}</a>
+                            </h4>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h1>Docs</h1>
+                <h4>
+                    Docs is a community-driven collection of code documentation for popular programming languages and frameworks.
+                    Interested in helping build it?
+                    share your thoughts in this feedback form to tell us how we can improve Docs!
+                </h4>
+                <br>
+                <div class="Doc">
+                    <h2>Most Viewed</h2>
+                    <div class="Documents">
+                        {% for doc in docs %}
+                            <div class="Docs">
+                                <h2>
+                                    <a href="{{ url_for('doc_content', id=doc.id) }}">{{ doc.title }}</a>
+                                </h2>
+                                <h4>{{ doc.desc }}</h4>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

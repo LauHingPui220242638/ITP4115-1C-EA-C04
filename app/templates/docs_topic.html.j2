@@ -1,0 +1,31 @@
+{% extends "base.html.j2" %}
+{% block app_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <h1>Topic</h1>
+                    {% for topic in topics %}
+                        <div class="topic">
+                            <h4>
+                                    <a href="{{ url_for('doc_topic', id=topic.id) }}">{{ topic.name }}</a>
+                            </h4>
+                        </div>
+                    {% endfor %} 
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h1>{{ cur_topic.name }}</h1>
+                <h4>{{ cur_topic.description }}</h4>
+                <br>
+                <h3>Documents</h3>
+                {% for doc in related_doc %}
+                <div class="Docu"></div>
+                <a href="{{ url_for('doc_content', id=doc.id) }}">{{ doc.title }}</a>
+                </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

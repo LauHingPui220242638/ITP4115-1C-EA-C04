@@ -7,7 +7,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm, AddSubjectForm, AddCourseForm, AddChapterForm, AddLessonForm
-from app.models import User, Course, Subject, Post, Chapter, Lesson
+from app.models import User, Course, Subject, Post, Chapter, Lesson, Project, ConceptTopic, Docs, Article
 from app.email import send_password_reset_email
 
 
@@ -193,6 +193,24 @@ def unfollow(username):
     return redirect(url_for('user', username=username))
 
 
+#New code
+@app.route('/projects')
+def Projects():
+    subject = Subject.query.all()
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    projects = Project.query.all()
+    return render_template('projects.html.j2', title=_('Projects'), subject=subject,
+     language=language, other=other, projects=projects)
+
+
+@app.route('/projects/<int:id>')
+def Projects_subj(id):
+    subject = Subject.query.get(id)
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    projects = Project.query.filter(Project.related_subj == id)
+    return render_template('projects_subj.html.j2', subject=subject, language=language, other=other, projects=projects)
 #new codes
 @app.route('/admin')
 @login_required
@@ -307,3 +325,49 @@ def course(id):
     if not course:
         return redirect(url_for('index'))
     return render_template('course.html.j2', title=_(course.coursename), course=course)
+
+
+@app.route('/docs')
+def docs():
+    topics = ConceptTopic.query.all()
+    docs = Docs.query.all()
+    return render_template('docs.html.j2', title=_('Docs'), topics=topics, docs=docs)
+
+
+@app.route('/docs/<int:id>')
+def doc_topic(id):
+    topics = ConceptTopic.query.all()
+    cur_topic = ConceptTopic.query.get(id)
+    related_doc = Docs.query.filter(Docs.related_topic == id)
+    return render_template('docs_topic.html.j2', title=_(cur_topic.name),cur_topic=cur_topic, topics=topics, related_doc=related_doc)
+
+@app.route('/docs/concept/<int:id>')
+def doc_content(id):
+    topics = ConceptTopic.query.all()
+    concept = Docs.query.get(id)
+    
+    return render_template('doc_cont.html.j2', title=_(concept.title), topics=topics, concept=concept)
+
+@app.route('/articles')
+def articles():
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    articles = Article.query.all()
+    return render_template('article_list.html.j2', title=_('Articles'), language=language,other=other,articles=articles)
+
+@app.route('/articles/subject/<int:id>')
+def article_subj(id):
+    subject = Subject.query.get(id)
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    articles = Article.query.filter(Article.related_subj == id)
+    return render_template('articles_sub.html.j2', title=_('Areticles'),subject=subject, language=language, articles=articles, 
+                           other=other)
+
+
+@app.route('/articles/<int:id>')
+def article_content(id):
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    article = Article.query.get(id)
+    return render_template('article_cont.html.j2', title=_(article.name), language=language, other=other, article=article)

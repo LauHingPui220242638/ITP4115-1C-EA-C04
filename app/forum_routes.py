@@ -62,7 +62,7 @@ def topic(id):
     topic = Topic.query.get(id)
     form = ReplyForm()
     forumcat = ForumCat.query.get(topic.forumcat_id)
-    replys = db.session.query(Reply).filter_by(topic_id= id).order_by(desc(Reply.date)).all()
+    replys = db.session.query(Reply).filter_by(topic_id= id).order_by(Reply.date).all()
     for reply in replys:
         reply.author = User.query.get(reply.author_id).username
         likers = reply.likers

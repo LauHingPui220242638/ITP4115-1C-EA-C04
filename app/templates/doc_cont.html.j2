@@ -5,16 +5,21 @@
             <div class="col-md-3">
                 <div class="sidebar">
                     <h1>Topic</h1>
-                    {% for concept in concepts %}
+                    {% for topic in topics %}
                         <div class="topic">
                             <h4>
-                                    <a href="{{ url_for('doc_content', id=concept.id) }}">{{ concept.title }}</a>
+                                    <a href="{{ url_for('doc_topic', id=topic.id) }}">{{ topic.name }}</a>
                             </h4>
                         </div>
                     {% endfor %} 
                 </div>
             </div>
             <div class="col-md-9">
+            <h1>{{ concept.title }}</h1>
+            <br>
+            <div class="Content">
+            <h4>{{ concept.desc }}</h4>
+            </div>
             </div>
         </div>
     </div>

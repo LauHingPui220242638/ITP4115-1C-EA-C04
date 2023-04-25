@@ -17,7 +17,13 @@
             <div class="col-md-9">
                 <h1>{{ cur_topic.name }}</h1>
                 <h4>{{ cur_topic.description }}</h4>
+                <br>
+                <h3>Documents</h3>
+                {% for doc in related_doc %}
                 <div class="Docu"></div>
+                <a href="{{ url_for('doc_content', id=doc.id) }}">{{ doc.title }}</a>
+                </div>
+                {% endfor %}
                 </div>
             </div>
         </div>

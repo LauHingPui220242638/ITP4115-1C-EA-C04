@@ -26,28 +26,19 @@
                         {% endfor %}
                     </div>
                     <br>
-                    <h4>All Articles</h4>
+                    <h4>
+                        <a href="{{ url_for('articles') }}">All Articles</a>
+                    </h4>
                 </div>
             </div>
             <div class="col-md-9">
-                <h1>Articles</h1>
-                <br>
-                <div class="article_list">
-                    <h4>
-                        Articles are more in-depth explanations about concepts covered in Codecademy courses.
-                        Here you'll learn more about workflows that developers use every day,
-                        and take your coding skills to the next level.
-                    </h4>
-                    <br>
-                    <h3>Most Viewed Articles</h3>
-                    {% for article in articles %}
-                        <div class="Article">
-                            <a href="{{ url_for('article_content', id=article.id)}}">{{ article.name }}</a>
-                            By {{ article.author }}
-                        </div>
-                    {% endfor %}
+            <h1>{{ subject.name }} Articles</h1>
+            <h3>Articles are more in-depth explanations about concepts covered in Codecademy courses. Here you'll learn more about workflows that developers use every day, and take your coding skills to the next level.</h3>
+            {% for article in articles %}
+                <div class="Article">
+                    <a href="{{ url_for('article_content', id=article.id)}}">{{ article.name }}</a>
+                    By {{ article.author }}
                 </div>
+            {% endfor %}
             </div>
-        </div>
-    </div>
-{% endblock %}
+        {% endblock %}

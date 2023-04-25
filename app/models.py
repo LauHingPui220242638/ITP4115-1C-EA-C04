@@ -177,8 +177,6 @@ class Article(db.Model):
     
 
 # ---------------------------- LAU HING PUI START FROM HERE ---------------------------- #
-
-
 class ForumCat(db.Model):
     __tablename__ = 'forumcats'
     id = db.Column(db.Integer, primary_key=True)

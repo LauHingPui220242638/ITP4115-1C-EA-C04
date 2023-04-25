@@ -41,11 +41,11 @@
                         {{ _('Resources') }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Resource 1</a>
+                        <a class="dropdown-item" href="{{ url_for('docs') }}">{{ _('Docs') }}</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Resource 2</a>
+                        <a class="dropdown-item" href="{{ url_for('articles') }}">{{ _('Articles') }}</a>
                         </div>
-                    </li>
+                    </li> 
                     <li>
                         <a href="{{ url_for('forum.home') }}">{{ _('Forum') }}</a>
                     </li>

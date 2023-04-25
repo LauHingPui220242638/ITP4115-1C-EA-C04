@@ -6,13 +6,8 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
-<<<<<<< HEAD
-    ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Course, Subject, Post, Project
-=======
     ResetPasswordRequestForm, ResetPasswordForm, AddSubjectForm, AddCourseForm, AddChapterForm, AddLessonForm
-from app.models import User, Course, Subject, Post, Chapter, Lesson
->>>>>>> origin/main
+from app.models import User, Course, Subject, Post, Chapter, Lesson, Project, ConceptTopic, Docs
 from app.email import send_password_reset_email
 
 
@@ -330,3 +325,35 @@ def course(id):
     if not course:
         return redirect(url_for('index'))
     return render_template('course.html.j2', title=_(course.coursename), course=course)
+
+
+@app.route('/docs')
+def docs():
+    topics = ConceptTopic.query.all()
+    docs = Docs.query.all()
+    return render_template('docs.html.j2', title=_('Docs'), topics=topics, docs=docs)
+
+
+@app.route('/docs/<int:id>')
+def doc_topic(id):
+    topics = ConceptTopic.query.all()
+    cur_topic = ConceptTopic.query.get(id)
+    return render_template('docs_topic.html.j2', title=_(cur_topic.name),cur_topic=cur_topic, topics=topics)
+
+@app.route('/docs/concept/<int:id>')
+def doc_content(id):
+    concept = Docs.query.get(id)
+    return render_template('doc_cont.html.j2', title=_(concept.title), concept=concept)
+
+@app.route('/articles')
+def articles():
+    subject = Subject.query.all()
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
+    career = Course.query.filter(Course.Path == 'Career')
+    courses = Course.query.filter(Course.Path == 'None')
+    return render_template('article_list.html.j2', title=_('Articles'), subject=subject, career=career,
+                           language=language,other=other, courses=courses)
+
+#article_subj
+#article

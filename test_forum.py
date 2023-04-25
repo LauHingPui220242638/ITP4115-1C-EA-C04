@@ -4,7 +4,7 @@ from app.models import User, ForumCat, ForumTag, Topic, Reply
 
 app_context = app.app_context()
 app_context.push()
-# db.drop_all()
+db.drop_all()
 db.create_all()
 
 #Forum User

@@ -1,0 +1,89 @@
+{% extends "base.html.j2" %}
+{% block app_content %}
+    <style>
+      .Subjects_cat {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px
+      }
+    </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <h1>Topic</h1>
+                    {% for topic in topics %}
+                        <div class="topic">
+                            <h4>
+                                <a href="{{ url_for('doc_topic', id=topic.id) }}">{{ topic.name }}</a>
+                            </h4>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+                <div class="col-md-9">
+                    <h1>Docs</h1>
+                    <h4>
+                        Docs is a community-driven collection of code documentation for popular programming languages and frameworks.
+                        Interested in helping build it?
+                        share your thoughts in this feedback form to tell us how we can improve Docs!
+                    </h4>
+                    <br>
+                    <div class="Doc">
+                        <h2>Most Viewed</h2>
+                        <div class="Documents">
+                            {% for doc in docs %}
+                                <div class="Docs">
+                                    <h2>
+                                        <a href="{{ url_for('index') }}">{{ doc.title }}</a>
+                                    </h2>
+                                    <h4>{{ doc.desc }}</h4>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <br>
+                        <h3>Markdown</h3>
+                        <h4>Table</h4>
+                        <li>
+                            A table is an arrangement of data in rows and columns.
+                            To add a table in Markdown...
+                        </li>
+                        <h3>JavaScript</h3>
+                        <h4>Switch</h4>
+                        <li>
+                            The switch statement evaluates an expression
+                            and allows different blocks of code to execute depending on the result
+                        </li>
+                        <h3>HTML</h3>
+                        <h4>Elements</h4>
+                        <li>
+                            Elements are discrete components within an HTML document that generally consist
+                            of at least one tag but can have two tags with optional content.
+                        </li>
+                        <h3>Python</h3>
+                        <h4>assert</h4>
+                        <li>
+                            A keyword for confirming the truthiness of a given statement that is
+                            often used to facilitate development, document code, and debug.
+                        </li>
+                        {# {% for career in career %}
+                        <div class="Career">
+                            <h3>
+                                <a href="{{ url_for('course', id=career.id) }}">{{ career.coursename }}</a>
+                            </h3>
+                        </div>
+                    {% endfor %} #}
+                        {# <h3>Most Popular Courses</h3> #}
+                        {# {% for course in courses %}
+                        <div class="Courses">
+                            <h3>
+                                <a href="{{ url_for('course', id=course.id) }}">{{ course.coursename }}</a>
+                            </h3>
+                        </div>
+                    {% endfor %} #}
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

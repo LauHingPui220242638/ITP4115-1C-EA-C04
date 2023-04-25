@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="sidebar">
-                    <h2>Topic</h2>
+                    <h2>Languages</h2>
                     <div class="Languages">
                         {% for language in language %}
                             <div class="Language">
@@ -32,13 +32,20 @@
                             </div>
                         {% endfor %}
                     </div>
+                    <br>
+                    <h4>
+                    All Articles
+                    </h4>
                 </div>
             </div>
             <div class="col-md-9">
-                <h1>Explore the Catalog</h1>
+                <h1>Articles</h1>
+            
                 <br>
                 <div class="catalog">
-                    <h3>Popular Subjects and Languages</h3>
+                    <h4>Articles are more in-depth explanations about concepts covered in Codecademy courses. 
+                    Here you'll learn more about workflows that developers use every day,
+                     and take your coding skills to the next level.</h4>
                     <div class="Subjects_cat">
                         {% for subject in subject %}
                             <div class="Subjects">
@@ -69,5 +76,5 @@
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+        </div>
+    {% endblock %}

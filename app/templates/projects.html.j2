@@ -1,0 +1,54 @@
+{% extends "base.html.j2" %}
+{% block app_content %}
+    <style>
+      .Subjects_cat {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px
+      }
+    </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <h2>Languages</h2>
+                    <div class="Languages">
+                        {% for language in language %}
+                            <div class="Language">
+                                <h4>
+                                    <a href="{{ url_for('Projects_subj', id=language.id) }}">{{ language.name }}</a>
+                                </h4>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <h2>Subjects</h2>
+                    <div class="Others">
+                        {% for other in other %}
+                            <div class="Others">
+                                <h4>
+                                    <a href="{{ url_for('Projects_subj', id=other.id) }}">{{ other.name }}</a>
+                                </h4>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <h4>
+                        <b>Project Home</b>
+                    </h4>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <h1>Project Home</h1>
+                    <div class="projects">
+                    <h1>Staff pick</h1>
+                    {% for project in projects %}
+                        <div class="Project">
+                        <h4>{{ project.projectname }}</h4>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

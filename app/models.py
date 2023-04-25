@@ -21,10 +21,10 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    is_admin = db.Column(db.Boolean(),default=False)
+    is_admin = db.Column(db.Boolean(), default=False)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
-    topics = db.relationship('Topic', backref='user', lazy=True) 
-    replys = db.relationship('Reply', backref='user', lazy=True) 
+    topics = db.relationship('Topic', backref='user', lazy=True)
+    replys = db.relationship('Reply', backref='user', lazy=True)
     about_me = db.Column(db.String(140))
     followed = db.relationship(
         'User', secondary=followers,
@@ -100,6 +100,8 @@ class Subject(db.Model):
     description = db.Column(db.String(600))
     type = db.Column(db.String(50), nullable=False)
     course = db.relationship("Course", backref="subject", lazy=True)
+    project = db.relationship("Project", backref="subject", lazy=True)
+    article = db.relationship("Article", backref="subject", lazy=True)
 
     @validates('type')
     def validate_type(self, key, value):
@@ -137,6 +139,7 @@ class Project(db.Model):
     projectname = db.Column(db.String(200))
     description = db.Column(db.String(600))
     courseid = db.Column(db.Integer, db.ForeignKey('course.id'))
+    related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
 
 
 class Lesson(db.Model):
@@ -147,7 +150,31 @@ class Lesson(db.Model):
     chapter_id = db.Column(db.Integer, db.ForeignKey(
         'chapter.id'), nullable=False)
 
+# new code
+# ----------------------------------------------------------------------------
+class ConceptTopic(db.Model):
+    __tablename__ = 'concepttopic'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    description = db.Column(db.String(600))
+    docs = db.relationship("Docs", backref="concepttopic")
 
+class Docs(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    desc = db.Column(db.String(1000))
+    related_topic = db.Column(db.Integer, db.ForeignKey('concepttopic.id'))
+
+
+
+
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    author = db.Column(db.String(100))
+    description = db.Column(db.String(6000))
+    related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    
 
 # ---------------------------- LAU HING PUI START FROM HERE ---------------------------- #
 class ForumCat(db.Model):
@@ -156,51 +183,60 @@ class ForumCat(db.Model):
     forumcatsname = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(400))
     color = db.Column(db.String(6))
-    is_deleted =  db.Column(db.Boolean, default=False)
-    topics = db.relationship('Topic', backref='forumcats', lazy=True) 
-    tags = db.relationship('ForumTag', backref='forumcats', lazy=True) 
+    is_deleted = db.Column(db.Boolean, default=False)
+    topics = db.relationship('Topic', backref='forumcats', lazy=True)
+    tags = db.relationship('ForumTag', backref='forumcats', lazy=True)
+
 
 topic_tag = db.Table('topic_tag',
-                    db.Column('topic_id', db.Integer, db.ForeignKey('topics.id')),
-                    db.Column('forumtags_id', db.Integer, db.ForeignKey('forumtags.id'))
-                    )
+                     db.Column('topic_id', db.Integer,
+                               db.ForeignKey('topics.id')),
+                     db.Column('forumtags_id', db.Integer,
+                               db.ForeignKey('forumtags.id'))
+                     )
 
 reply_like = db.Table('reply_like',
-                    db.Column('reply_id', db.Integer, db.ForeignKey('replys.id')),
-                    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-                    )
+                      db.Column('reply_id', db.Integer,
+                                db.ForeignKey('replys.id')),
+                      db.Column('user_id', db.Integer,
+                                db.ForeignKey('user.id'))
+                      )
+
+
 class ForumTag(db.Model):
     __tablename__ = 'forumtags'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
-    forumcat_id =  db.Column(db.Integer, db.ForeignKey('forumcats.id'), nullable=False)
+    forumcat_id = db.Column(db.Integer, db.ForeignKey(
+        'forumcats.id'), nullable=False)
+
 
 class Topic(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer, primary_key=True)
-    author_id =  db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    forumcat_id =  db.Column(db.Integer, db.ForeignKey('forumcats.id'), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    forumcat_id = db.Column(db.Integer, db.ForeignKey(
+        'forumcats.id'), nullable=False)
     title = db.Column(db.String(50))
     date = db.Column(db.Date, default=datetime.utcnow)
     votenum = db.Column(db.Integer, default=0)
-    is_deleted =  db.Column(db.Boolean, default=False)
-    replys = db.relationship('Reply', backref='topics') 
+    is_deleted = db.Column(db.Boolean, default=False)
+    replys = db.relationship('Reply', backref='topics')
     tags = db.relationship('ForumTag', secondary=topic_tag, backref='topics')
 
     @staticmethod
-    def create_topic(author_id,forumcat_id,title,content,tagname):
+    def create_topic(author_id, forumcat_id, title, content, tagname):
         topic = Topic(
-        author_id = author_id,
-        forumcat_id = forumcat_id,
-        title = title
-        ) 
+            author_id=author_id,
+            forumcat_id=forumcat_id,
+            title=title
+        )
         db.session.add(topic)
         db.session.commit()
 
-        
-        reply_first = Reply.create_reply(content,topic.id,author_id,0)
+        reply_first = Reply.create_reply(content, topic.id, author_id, 0)
         db.session.add(reply_first)
-        
+
         tags = tagname.split("#")
         tagsappend = []
         for tag in tags:
@@ -227,27 +263,28 @@ class Topic(db.Model):
 class Reply(db.Model):
     __tablename__ = 'replys'
     id = db.Column(db.Integer, primary_key=True)
-    author_id =  db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    topic_id =  db.Column(db.Integer, db.ForeignKey('topics.id'), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    topic_id = db.Column(db.Integer, db.ForeignKey(
+        'topics.id'), nullable=False)
     content = db.Column(db.String(10000))
-    is_reported =  db.Column(db.Boolean, default=False)
-    is_deleted =  db.Column(db.Boolean, default=False)
+    is_reported = db.Column(db.Boolean, default=False)
+    is_deleted = db.Column(db.Boolean, default=False)
     likers = db.relationship('User', secondary='reply_like',
-                            backref=db.backref('likers', lazy='dynamic'))
+                             backref=db.backref('likers', lazy='dynamic'))
     likenum = db.Column(db.Integer, default=0)
-    date = db.Column(db.Date, default=datetime.utcnow)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
     parent_id = db.Column(db.Integer, db.ForeignKey('replys.id'))
     replys = db.relationship(
         'Reply', backref=db.backref('parent', remote_side=[id]),
-        lazy='dynamic') 
-    
+        lazy='dynamic')
+
     @staticmethod
-    def create_reply(content,topic_id, author_id, parent_id):
+    def create_reply(content, topic_id, author_id, parent_id):
         reply = Reply(
-            content = content,
-            topic_id = topic_id,
-            author_id = author_id,
-            parent_id = None if parent_id == 0 else parent_id
+            content=content,
+            topic_id=topic_id,
+            author_id=author_id,
+            parent_id=None if parent_id == 0 else parent_id
         )
         db.session.add(reply)
         db.session.commit()

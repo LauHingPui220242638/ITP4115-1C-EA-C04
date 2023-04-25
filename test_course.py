@@ -33,7 +33,7 @@ db.session.add(c3)
 ch1 = Chapter(id=1, title='Hello World', course_id=1)
 db.session.add(ch1)
 p1 = Project(id=1, projectname='Block Letters',
-            description='Display your initials on the screen in block letters and create an ASCII art.',courseid = 1)
+            description='Display your initials on the screen in block letters and create an ASCII art.',courseid = 1, related_subj=1)
 db.session.add(p1)
 l1 = Lesson(id=1, name='Hello World', related_subj=1, chapter_id=1)
 db.session.add(l1)

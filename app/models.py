@@ -96,8 +96,8 @@ class Post(db.Model):
 
 class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(40))
-    description = db.Column(db.String(600))
+    name = db.Column(db.String(40), nullable=False)
+    description = db.Column(db.String(600), nullable=False)
     type = db.Column(db.String(50), nullable=False)
     course = db.relationship("Course", backref="subject", lazy=True)
     project = db.relationship("Project", backref="subject", lazy=True)
@@ -112,8 +112,8 @@ class Subject(db.Model):
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    coursename = db.Column(db.String(200))
-    description = db.Column(db.String(600))
+    coursename = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String(600), nullable=False)
     chapters = db.relationship('Chapter', backref='course', lazy=True)
     project = db.relationship('Project', backref='course')
     Path = db.Column(db.String(10), nullable=False)
@@ -136,16 +136,16 @@ class Chapter(db.Model):
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    projectname = db.Column(db.String(200))
-    description = db.Column(db.String(600))
+    projectname = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String(600), nullable=False)
     courseid = db.Column(db.Integer, db.ForeignKey('course.id'))
     related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
 
 
 class Lesson(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200))
-    related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    name = db.Column(db.String(200), nullable=False)
+    related_subj = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
     subject = db.relationship("Subject", backref="lesson", lazy=True)
     chapter_id = db.Column(db.Integer, db.ForeignKey(
         'chapter.id'), nullable=False)

@@ -315,8 +315,10 @@ def catalog_cour():
 @app.route('/catalog/<int:id>')
 def catalog_subj(id):
     subject = Subject.query.get(id)
+    language = Subject.query.filter(Subject.type == 'Language')
+    other = Subject.query.filter(Subject.type == 'Other')
     courses = Course.query.filter(Course.related_subj == id)
-    return render_template('catalog_subj.html.j2', title=_(subject.name), subject=subject, courses=courses)
+    return render_template('catalog_subj.html.j2', title=_(subject.name), subject=subject,language=language,other=other, courses=courses)
 
 
 @app.route('/course/<int:id>')
